@@ -1,0 +1,2886 @@
+/* ===== ПОЛНЫЙ CSS КОД ===== */
+
+/* ===== ОСНОВНЫЕ СБРОСЫ ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --accent-color: #7aa2f7;
+    --accent-glow: rgba(122, 162, 247, 0.5);
+    --accent-light: rgba(122, 162, 247, 0.2);
+}
+
+.theme-red {
+    --accent-color: #f28b82;
+    --accent-glow: rgba(242, 139, 130, 0.5);
+    --accent-light: rgba(242, 139, 130, 0.2);
+}
+
+.theme-green {
+    --accent-color: #98c379;
+    --accent-glow: rgba(152, 195, 121, 0.5);
+    --accent-light: rgba(152, 195, 121, 0.2);
+}
+
+.theme-purple {
+    --accent-color: #bb9af7;
+    --accent-glow: rgba(187, 154, 247, 0.5);
+    --accent-light: rgba(187, 154, 247, 0.2);
+}
+
+.theme-orange {
+    --accent-color: #ffb347;
+    --accent-glow: rgba(255, 179, 71, 0.5);
+    --accent-light: rgba(255, 179, 71, 0.2);
+}
+
+/* Запрещаем скролл всей страницы, фиксируем на 100vh */
+body {
+    background: #0c121c;
+    color: #ffffff;
+    height: 100vh;
+    overflow: hidden; /* Главный фикс */
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    margin: 0;
+    padding: 0px;
+}
+
+/* Шапка теперь не sticky, а просто фиксированной высоты */
+.header {
+    flex-shrink: 0;
+    position: relative;
+    z-index: 100;
+    width: 100%;
+}
+
+.header-content {
+    background: #0c121c;
+    padding: 0px 20px 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(12, 18, 28, 1), transparent);
+    pointer-events: none;
+    z-index: 99;
+}
+
+.logo h1 {
+    font-size: 60px;
+    font-weight: 400;
+    color: #263348;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.header-info {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.time-block, .timer-block, .date-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+}
+
+.time-row, .timer-row, .date-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 15px;
+}
+
+.time-label, .timer-label, .date-label {
+    font-size: 10px;
+    color: #39495c;
+    font-family: 'Arial Black', 'Helvetica Bold', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 900;
+    opacity: 0.8;
+}
+
+.time-row {
+    width: 180px; /* Сузили, так как даты тут больше нет */
+    justify-content: center;
+}
+
+.time {
+    font-size: 42px;
+    font-weight: 400;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    color: #a9bad4; 
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 2px;
+}
+
+.date {
+    font-size: 42px; 
+    color: #a9bad4;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+/* Разделители между блоками */
+.time-block::after {
+    content: "|";
+    color: #3a4a5a;
+    font-size: 42px;
+    font-weight: 200;
+    position: absolute;
+    right: -30px;
+    top: 0px;
+}
+
+.timer-block::after {
+    content: "|";
+    color: #3a4a5a;
+    font-size: 42px;
+    font-weight: 200;
+    position: absolute;
+    right: -30px;
+    top: 0px;
+}
+
+.timer-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.timer-display {
+    font-size: 42px;
+    font-weight: 400;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    color: var(--accent-color);
+    width: 180px;
+    min-width: 180px;
+    max-width: 180px;
+    text-align: center;
+    display: inline-block;
+    letter-spacing: 2px;
+    font-variant-numeric: tabular-nums;
+}
+
+.timer-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 60px;
+}
+
+.timer-btn {
+    background: transparent;
+    border: none;
+    color: #5f748d;
+    font-size: 13px;
+    font-family: 'Arial Black', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 2px 0;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    font-weight: 900;
+    opacity: 0.7;
+    white-space: nowrap;
+}
+
+.timer-btn:hover {
+    color: #9aabbf;
+    opacity: 1;
+    transform: translateX(2px);
+}
+
+.weather-temp {
+    font-size: 38px;
+    font-weight: 400;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    color: #a9bad4;
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+    text-align: right;
+    display: inline-block;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1px;
+}
+
+.weather-city {
+    font-size: 28px;
+    color: #5f7289;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    width: 140px;
+    min-width: 140px;
+    max-width: 140px;
+    text-align: left;
+    display: inline-block;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.time-block::after {
+    content: "|";
+    color: #3a4a5a;
+    font-size: 42px;
+    font-weight: 200;
+    position: absolute;
+    right: -40px;
+    top: 0px;
+}
+
+.timer-block::after {
+    content: "|";
+    color: #3a4a5a;
+    font-size: 42px;
+    font-weight: 200;
+    position: absolute;
+    right: -40px;
+    top: 0px;
+}
+
+.weather-block::after {
+    display: none;
+}
+
+.header-right {
+    width: 180px;
+    visibility: hidden;
+}
+
+.theme-switcher {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.theme-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.theme-btn:hover {
+    transform: scale(1.2);
+    border-color: white;
+}
+
+.theme-btn.active {
+    border-color: white;
+    transform: scale(1.2);
+}
+
+/* Кнопка настроек */
+.settings-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 25px;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+    color: #3a5068;
+}
+
+.settings-btn:hover {
+    background: #2a3f54;
+    border-color: var(--accent-color);
+}
+
+.settings-text {
+    padding-bottom: 15px;
+    color: #3a5068;
+    font-size: 20px;
+    font-family: 'Arial Black', 'Helvetica Bold', sans-serif;
+    line-height: 1;
+}
+
+/* Модальное окно */
+.widget-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.widget-modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: #1e2c3c;
+    border: 1px solid #3a5068;
+    border-radius: 24px;
+    width: 300px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #3a5068;
+}
+
+.modal-header h3 {
+    font-size: 20px;
+    margin: 0;
+    border: none;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    text-shadow: none;  /* убирает тень */
+    -webkit-text-stroke: 0; /* убирает обводку */
+    font-weight: normal; /* нормальная жирность */
+}
+
+.modal-close {
+    background: transparent;
+    border: none;
+    color: #8f9eb5;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: white;
+}
+
+.modal-list {
+    padding: 20px;
+}
+
+.modal-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modal-item:last-child {
+    margin-bottom: 0;
+}
+
+.modal-item:hover {
+    background: #2a3f54;
+    border-color: var(--accent-color);
+}
+
+.item-name {
+    color: white;
+    font-size: 16px;
+    font-family: 'Arial Black', 'Helvetica Bold', sans-serif;
+}
+
+/* ===== ТРИ КОЛОНКИ ===== */
+/* Контейнер колонок занимает всё оставшееся место */
+.columns {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    flex: 1;
+    overflow: hidden; /* Скрываем внешний скролл */
+    margin-top: 0;
+}
+
+/* Блоки колонок скроллятся только внутри себя */
+.block {
+    padding: 24px;
+    height: 100%; /* На всю высоту доступного пространства */
+    overflow-y: auto; /* Внутренний скролл, если контент не влезает */
+}
+
+/* Делаем скроллбары в колонках тонкими и аккуратными */
+.block::-webkit-scrollbar {
+    width: 6px;
+}
+.block::-webkit-scrollbar-track {
+    background: transparent;
+}
+.block::-webkit-scrollbar-thumb {
+    background: #3a5068;
+    border-radius: 4px;
+}
+.block::-webkit-scrollbar-thumb:hover {
+    background: #5f748d;
+}
+
+.block-content h2 {
+    font-size: 24px;
+    font-weight: 400;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.left-block {
+    background: #28374c;
+}
+
+/* ===== ВИДЖЕТ ПРИЛОЖЕНИЙ ===== */
+.apps-widget {
+    background: #1e2c3c;
+    border-radius: 24px;
+    padding: 20px;
+    width: 100%;
+    height: auto; /* Фиксированная высота */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+    border: 1px solid #3a5068;
+    overflow: hidden; /* Скрываем overflow у виджета */
+}
+
+.apps-header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #3a5068;
+    padding-bottom: 15px;
+    flex-shrink: 0; /* Заголовок не сжимается */
+}
+
+.apps-title {
+    font-size: 28px;
+    font-weight: 400;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin: 0 0 15px 0;
+}
+
+.apps-categories {
+    flex: 1; /* Занимает всё оставшееся место */
+    overflow-y: auto; /* Включаем вертикальный скролл */
+    min-height: 0; /* Важно для flex-контейнера */
+    padding-right: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Стили для скролла */
+.apps-categories::-webkit-scrollbar {
+    width: 4px;
+}
+
+.apps-categories::-webkit-scrollbar-track {
+    background: #1a2938;
+    border-radius: 4px;
+}
+
+.apps-categories::-webkit-scrollbar-thumb {
+    background: #3a5068;
+    border-radius: 4px;
+}
+
+.apps-categories::-webkit-scrollbar-thumb:hover {
+    background: #5f748d;
+}
+
+/* Карточки приложений */
+.app-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 16px;
+    text-decoration: none;
+    color: #ffffff;
+    transition: all 0.2s;
+    position: relative;
+    flex-shrink: 0; /* Карточки не сжимаются */
+}
+
+.app-card:hover {
+    background: #2a3f54;
+    border-color: var(--accent-color);
+}
+
+.app-card:hover .delete-app {
+    opacity: 1;
+}
+
+.app-icon {
+    font-size: 24px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-name {
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    color: #e1e9ff;
+    flex: 1;
+}
+
+.delete-app {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    color: #5f748d;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-app:hover {
+    color: #f28b82;
+    transform: translateY(-50%) scale(1.2);
+}
+
+/* Кнопка добавления */
+.add-app-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: transparent;
+    border: 2px dashed #3a5068;
+    border-radius: 16px;
+    color: #8f9eb5;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.add-app-card:hover {
+    border-color: var(--accent-color);
+    color: #ffffff;
+    background: rgba(122, 162, 247, 0.1);
+}
+
+.add-icon {
+    font-size: 24px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-text {
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    font-style: italic;
+}
+
+/* ===== МОДАЛЬНОЕ ОКНО ДЛЯ ПРИЛОЖЕНИЙ ===== */
+.app-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.app-modal-content {
+    background: #1e2c3c;
+    border: 1px solid #3a5068;
+    border-radius: 24px;
+    width: 450px;
+    max-width: 90%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.app-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #3a5068;
+    flex-shrink: 0;
+}
+
+.app-modal-header h3 {
+    font-size: 24px;
+    color: #e1e9ff;
+    margin: 0;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    font-weight: 400;
+}
+
+.app-modal-close {
+    background: transparent;
+    border: none;
+    color: #8f9eb5;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.app-modal-close:hover {
+    color: #ffffff;
+    background: #2a3f54;
+}
+
+.app-modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.app-modal-input {
+    width: 100%;
+    padding: 14px 18px;
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 30px;
+    color: #ffffff;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.app-modal-input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+.app-modal-input::placeholder {
+    color: #5f748d;
+    font-style: italic;
+}
+
+/* Секция смайликов */
+.emoji-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.emoji-label {
+    font-size: 14px;
+    color: #8f9eb5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Arial Black', sans-serif;
+}
+
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 10px;
+    background: #1a2938;
+    border-radius: 16px;
+    border: 1px solid #3a5068;
+}
+
+/* Стили для скролла сетки смайликов */
+.emoji-grid::-webkit-scrollbar {
+    width: 4px;
+}
+
+.emoji-grid::-webkit-scrollbar-track {
+    background: #1a2938;
+    border-radius: 4px;
+}
+
+.emoji-grid::-webkit-scrollbar-thumb {
+    background: #3a5068;
+    border-radius: 4px;
+}
+
+.emoji-btn {
+    background: transparent;
+    border: none;
+    font-size: 28px;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+}
+
+.emoji-btn:hover {
+    background: #2a3f54;
+    transform: scale(1.1);
+}
+
+.emoji-btn.selected {
+    background: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Футер модального окна */
+.app-modal-footer {
+    display: flex;
+    gap: 12px;
+    padding: 20px 24px;
+    border-top: 1px solid #3a5068;
+    flex-shrink: 0;
+}
+
+.app-modal-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: 'Arial Black', 'Helvetica Bold', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.app-modal-btn.cancel {
+    background: transparent;
+    border: 1px solid #3a5068;
+    color: #8f9eb5;
+}
+
+.app-modal-btn.cancel:hover {
+    background: #2a3f54;
+    color: #ffffff;
+    border-color: var(--accent-color);
+}
+
+.app-modal-btn.add {
+    background: var(--accent-color);
+    color: white;
+}
+
+.app-modal-btn.add:hover {
+    background: var(--accent-color);
+    transform: scale(1.02);
+}
+
+/* Центральная колонка */
+.center-block {
+    background: #2d4256;
+    box-shadow: 0 15px 25px -8px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    z-index: 2;
+    position: relative;
+}
+
+/* ===== ВИДЖЕТ ЗАМЕТОК ===== */
+.notes-widget {
+    background: #1e2c3c;
+    border-radius: 24px;
+    padding: 24px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+    border: 1px solid #3a5068;
+    margin-bottom: 20px;
+}
+
+.notes-header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #3a5068;
+    padding-bottom: 12px;
+}
+
+.notes-title-input {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 400;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    width: 100%;
+    padding: 0;
+    outline: none;
+    letter-spacing: 1px;
+}
+
+.notes-title-input::placeholder {
+    color: #5f748d;
+}
+
+.notes-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: visible;
+    margin-bottom: 16px;
+    min-height: 100px;
+    max-height: 300px;
+    padding: 0 10px;
+    margin: 0 -10px;
+    width: calc(100% + 20px);
+    align-self: center;
+}
+
+.note-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    animation: slideIn 0.2s ease;
+    border-bottom: 1px solid #2a3f54;
+    position: relative;
+}
+
+.note-item:first-child {
+    padding-top: 12px;
+}
+
+.note-item:last-child {
+    padding-bottom: 12px;
+    border-bottom: none;
+}
+
+.note-item:hover .delete-note {
+    opacity: 1;
+}
+
+.note-item.hidden {
+    display: none;
+}
+
+.note-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #5f748d;
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    margin-left: 5px;
+}
+
+.note-checkbox:checked {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px 3px var(--accent-glow);
+}
+
+.note-checkbox:checked::after {
+    display: none;
+}
+
+.note-text {
+    flex: 1;
+    font-size: 16px;
+    color: #e1e9ff;
+    word-break: break-word;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+}
+
+.note-text.completed {
+    text-decoration: line-through;
+    color: #5f748d;
+}
+
+.delete-note {
+    background: transparent;
+    border: none;
+    color: #5f748d;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 5px;
+    opacity: 0;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.delete-note:hover {
+    color: #f28b82;
+}
+
+.notes-footer {
+    display: flex;
+    gap: 10px;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.note-input {
+    flex: 1;
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 30px;
+    padding: 12px 18px;
+    color: #ffffff;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+    font-style: italic;
+}
+
+.note-input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+.note-input::placeholder {
+    color: #5f748d;
+}
+
+.add-note-btn {
+    background: var(--accent-color);
+    border: none;
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.add-note-btn:hover {
+    background: var(--accent-color);
+    transform: scale(1.05);
+}
+
+.notes-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.notes-list::-webkit-scrollbar-track {
+    background: #1a2938;
+}
+
+.notes-list::-webkit-scrollbar-thumb {
+    background: #3a5068;
+    border-radius: 4px;
+}
+
+.notes-list::-webkit-scrollbar-thumb:hover {
+    background: #5f748d;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== ВИДЖЕТ РИСОВАНИЯ ===== */
+.draw-widget {
+    background: #1e2c3c;
+    border-radius: 24px;
+    padding: 24px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+    border: 1px solid #3a5068;
+    margin-bottom: 20px;
+}
+
+.draw-header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #3a5068;
+    padding-bottom: 12px;
+}
+
+.draw-title-input {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 400;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    width: 100%;
+    padding: 0;
+    outline: none;
+    letter-spacing: 1px;
+}
+
+.draw-title-input::placeholder {
+    color: #5f748d;
+}
+
+.draw-canvas-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: #f5f0e7;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    border: 1px solid #5f748d;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#drawCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    z-index: 2;
+    touch-action: none; /* <--- ЭТО ВАЖНО! Отключает скролл при рисовании */
+}
+
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(to right, #b3b3b3 1px, transparent 1px),
+        linear-gradient(to bottom, #b3b3b3 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.grid-overlay::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(to right, #4a4a4a 2px, transparent 2px),
+        linear-gradient(to bottom, #4a4a4a 2px, transparent 2px);
+    background-size: 100px 100px;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+.draw-footer {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.draw-btn {
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+}
+
+.draw-btn:hover {
+    background: #2a3f54;
+    border-color: var(--accent-color);
+}
+
+.draw-tools {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+.tool-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: #1a2938;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.tool-btn.active {
+    border-color: #ffffff;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.tool-btn[data-color="#7aa2f7"] { color: #7aa2f7; }
+.tool-btn[data-color="#bb9af7"] { color: #bb9af7; }
+.tool-btn[data-color="#f28b82"] { color: #f28b82; }
+.tool-btn[data-color="#98c379"] { color: #98c379; }
+.tool-btn[data-color="#000000"] { color: #000000; }
+
+.undo-redo {
+    display: flex;
+    gap: 5px;
+}
+
+.undo-redo .draw-btn {
+    width: 40px;
+    font-size: 18px;
+    padding: 8px 0;
+}
+
+/* ===== ВИДЖЕТ ПЛАНОВ ===== */
+.plans-widget {
+    background: #1e2c3c;
+    border-radius: 24px;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+    border: 1px solid #3a5068;
+    margin-bottom: 20px;
+        margin-top: 20px;
+}
+
+.plans-header {
+    margin-bottom: 16px;
+    border-bottom: 1px solid #3a5068;
+    padding-bottom: 10px;
+}
+
+.plans-title {
+    font-size: 28px;
+    font-weight: 400;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.plans-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.plans-tab {
+    flex: 1;
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 30px;
+    padding: 8px 0;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: #8f9eb5;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.plans-tab.active {
+    background: #2a3f54;
+    color: #ffffff;
+    border-color: var(--accent-color);
+}
+
+.plan-content {
+    display: none;
+}
+
+.plan-content.active {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.plan-progress {
+    margin-bottom: 20px;
+}
+
+.progress-text {
+    font-size: 12px;
+    color: #8f9eb5;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #1a2938;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--accent-color);
+    border-radius: 10px;
+    transition: width 0.3s;
+}
+
+.plan-list {
+    margin-bottom: 15px;
+    min-height: 180px;   /* ← блок будет минимум 400px, даже если задач нет */
+    max-height: 800px;   /* ← не больше 800px, дальше скролл */
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.plan-item {
+    display: flex;
+    align-items: flex-start; /* Текст начинается сверху, если он длинный */
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #2a3f54;
+}
+
+.plan-item:last-child {
+    border-bottom: none;
+}
+
+.plan-checkbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #5f748d;
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: all 0.2s;
+}
+
+.plan-checkbox:checked {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.plan-checkbox:checked + .plan-text {
+    text-decoration: line-through;
+    color: #5f748d;
+}
+
+.plan-text {
+    flex: 1;
+    font-size: 15px;
+    color: #e1e9ff;
+    font-family: 'Inter', sans-serif;
+    word-break: break-word;   /* Разрешает перенос длинных слов */
+    overflow-wrap: break-word; /* Дополнительная страховка для переноса */
+    white-space: normal;      /* Отменяет запрет на перенос строк */
+    line-height: 1.4;         /* Делает текст чуть компактнее при переносе */
+}
+
+.plan-delete {
+    background: transparent;
+    border: none;
+    color: #5f748d;
+    font-size: 18px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.plan-item:hover .plan-delete {
+    opacity: 1;
+}
+
+.plan-delete:hover {
+    color: #f28b82;
+}
+
+.add-plan {
+    display: flex;
+    gap: 10px;
+    align-items: center; /* Выравниваем по центру по вертикали */
+    width: 100%;
+}
+
+.plan-input {
+    flex: 1; /* Занимает всё свободное место */
+    min-width: 0; /* Важно, чтобы input мог сжиматься меньше своего содержимого */
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 30px;
+    padding: 12px 18px;
+    color: #ffffff;
+    font-size: 14px; /* Вернул нормальный размер шрифта, 10px слишком мелко */
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: all 0.2s;
+    font-style: italic;
+}
+
+.plan-input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+.plan-input::placeholder {
+    color: #5f748d;
+    font-style: italic;
+}
+
+.add-plan-btn {
+    background: var(--accent-color);
+    border: none;
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0; /* Запрещаем кнопке сжиматься */
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0; /* Убираем внутренние отступы, чтобы текст был ровно по центру */
+}
+
+.add-plan-btn:hover {
+    background: var(--accent-color);
+    transform: scale(1.05);
+}
+
+.plan-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.plan-list::-webkit-scrollbar-track {
+    background: #1a2938;
+}
+
+.plan-list::-webkit-scrollbar-thumb {
+    background: #3a5068;
+    border-radius: 4px;
+}
+
+/* ===== ВИДЖЕТ-ТРЕКЕР ПРИВЫЧЕК ===== */
+.tracker-widget {
+    background: #1e2c3c;
+    border-radius: 24px;
+    padding: 24px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+    border: 1px solid #3a5068;
+    margin-bottom: 20px;
+}
+
+.tracker-header {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #3a5068;
+    padding-bottom: 12px;
+}
+
+.tracker-title-input {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 400;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    width: 100%;
+    padding: 0;
+    outline: none;
+    letter-spacing: 1px;
+}
+
+.tracker-progress {
+    margin-bottom: 20px;
+}
+
+.tracker-table-container {
+    overflow-x: auto;
+    margin-bottom: 20px;
+    border-radius: 12px;
+}
+
+/* ===== ИСПРАВЛЕННАЯ ТАБЛИЦА ===== */
+.tracker-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Inter', sans-serif;
+    table-layout: fixed;
+}
+
+/* Заголовки таблицы */
+.tracker-table th {
+    padding: 0;
+    text-align: center;
+    color: #8f9eb5;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 1px solid #3a5068;
+    height: 56px;
+    vertical-align: middle;
+}
+
+/* Ячейки таблицы */
+.tracker-table td {
+    padding: 0;
+    text-align: center;
+    border-bottom: 1px solid #2a3f54;
+    height: 56px;
+    vertical-align: middle;
+}
+
+/* Первая колонка (названия) */
+.tracker-table th:first-child,
+.tracker-table td:first-child {
+    text-align: left;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #e1e9ff;
+    font-weight: 400;
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+}
+
+/* Колонки с днями (пн, вт, ср...) */
+.tracker-table th:not(:first-child),
+.tracker-table td:not(:first-child) {
+    width: auto;
+    /* min-width: 80px;
+    max-width: 80px; */
+}
+
+.tracker-corner {
+    background: transparent;
+}
+
+/* Контейнер для названия привычки и кнопки удаления */
+.habit-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 56px;
+    padding: 8px 0;
+    width: 100%;
+}
+
+/* Текст названия привычки */
+.habit-name span {
+    flex: 1;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    max-height: 56px;
+    overflow-y: auto;
+    color: #e1e9ff;
+}
+
+/* Квадратики для отметок */
+.habit-cell {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin: 0 auto;
+}
+
+.habit-cell:hover {
+    transform: scale(1.1);
+    border-color: var(--accent-color);
+}
+
+.habit-cell.completed {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+/* Кнопка удаления привычки */
+.delete-habit {
+    background: transparent;
+    border: none;
+    color: #5f748d;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+    padding: 0;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.delete-habit:hover {
+    color: #f28b82; /* Только крестик становится красным */
+    background: transparent; /* Фон прозрачный */
+}
+
+tr:hover .delete-habit {
+    opacity: 1;
+}
+
+/* Строка добавления новой привычки */
+.add-tracker-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.tracker-input {
+    flex: 1;
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 30px;
+    padding: 12px 18px;
+    color: #ffffff;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: all 0.2s;
+    font-style: italic;
+}
+
+.tracker-input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+.add-tracker-btn {
+    background: var(--accent-color);
+    border: none;
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-tracker-btn:hover {
+    background: var(--accent-color);
+    transform: scale(1.05);
+}
+
+/* Сообщение "Нет привычек" */
+.tracker-table td[colspan] {
+    text-align: center;
+    padding: 40px !important;
+    color: #5f748d;
+    font-style: italic;
+    height: auto;
+    min-height: 120px;
+    vertical-align: middle;
+    width: auto !important;
+}
+
+/* Скрываем кнопку удаления в строке с сообщением */
+.tracker-table td[colspan] .delete-habit {
+    display: none;
+}
+
+/* Скролл слева для текста в первой колонке */
+.habit-name span {
+    flex: 1;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    max-height: 56px;
+    overflow-y: auto;
+    direction: rtl; /* Меняем направление текста */
+    text-align: left; /* Выравнивание текста слева */
+    padding-left: 5px;
+    padding-right: 0;
+    scrollbar-width: thin;
+    scrollbar-color: #3a5068 #1a2938;
+}
+
+/* Возвращаем нормальное направление для текста */
+.habit-name span * {
+    direction: ltr;
+}
+
+/* Для Webkit браузеров (Chrome, Safari, Edge) */
+.habit-name span::-webkit-scrollbar {
+    width: 6px;
+}
+
+.habit-name span::-webkit-scrollbar-track {
+    background: #1a2938;
+    border-radius: 10px;
+}
+
+.habit-name span::-webkit-scrollbar-thumb {
+    background: #3a5068;
+    border-radius: 10px;
+    border: 1px solid #1a2938;
+}
+
+.habit-name span::-webkit-scrollbar-thumb:hover {
+    background: #5f748d;
+}
+
+.habit-name span::-webkit-scrollbar-button {
+    display: none;
+}
+
+/* Убеждаемся что скролл слева */
+.habit-name span {
+    direction: rtl;
+}
+
+.habit-name span > * {
+    direction: ltr;
+}
+
+/* Скролл без фона и без стрелок */
+.habit-name span {
+    flex: 1;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.4;
+    max-height: 56px;
+    overflow-y: auto;
+    scrollbar-width: thin; /* Для Firefox */
+    scrollbar-color: #3a5068 transparent; /* Убираем фон */
+    padding-right: 3px;
+}
+
+/* Убираем фон и стрелки для Webkit браузеров (Chrome, Safari, Edge) */
+.habit-name span::-webkit-scrollbar {
+    width: 4px; /* Тоньше */
+    background: transparent; /* Прозрачный фон */
+}
+
+.habit-name span::-webkit-scrollbar-track {
+    background: transparent; /* Прозрачный трек */
+}
+
+.habit-name span::-webkit-scrollbar-thumb {
+    background: #3a5068; /* Только ползунок */
+    border-radius: 10px;
+}
+
+.habit-name span::-webkit-scrollbar-thumb:hover {
+    background: #5f748d;
+}
+
+/* Полностью убираем стрелки */
+.habit-name span::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+/* Для Firefox */
+.habit-name span {
+    scrollbar-width: thin;
+    scrollbar-color: #3a5068 transparent;
+}
+
+/* ===== ВИДЖЕТ КАЛЕНДАРЯ ===== */
+.calendar-widget {
+    background: #1e2c3c;
+    border-radius: 24px;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+    border: 1px solid #3a5068;
+    margin-bottom: 20px;
+}
+
+.calendar-header {
+    margin-bottom: 16px;
+    border-bottom: 1px solid #3a5068;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.calendar-title {
+    font-size: 28px;
+    font-weight: 400;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.calendar-month {
+    display: flex;
+    align-items: center;
+    gap: 0px;
+    background: #1a2938;
+    padding: 4px 10px;
+    border-radius: 30px;
+    border: 1px solid #3a5068;
+}
+
+.month-prev, .month-next {
+    background: transparent;
+    border: none;
+    color: #8f9eb5;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: color 0.2s;
+}
+
+.month-prev:hover, .month-next:hover {
+    color: var(--accent-color);
+}
+
+.month-year {
+    color: #ffffff;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    min-width: 120px;
+    text-align: center;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.day-name {
+    text-align: center;
+    color: #8f9eb5;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    padding: 8px 0;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.calendar-cell {
+    aspect-ratio: 1;
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 12px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.calendar-cell:hover {
+    border-color: var(--accent-color);
+    transform: scale(1.02);
+}
+
+.calendar-cell.selected {
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.cell-date {
+    font-size: 14px;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 4px;
+}
+
+.cell-note {
+    font-size: 10px;
+    color: #8f9eb5;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.calendar-cell[data-color="#7aa2f7"] { background: rgba(122, 162, 247, 0.2); }
+.calendar-cell[data-color="#bb9af7"] { background: rgba(187, 154, 247, 0.2); }
+.calendar-cell[data-color="#f28b82"] { background: rgba(242, 139, 130, 0.2); }
+.calendar-cell[data-color="#98c379"] { background: rgba(152, 195, 121, 0.2); }
+
+.calendar-colors {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #3a5068;
+}
+
+.color-hint {
+    font-size: 12px;
+    color: #8f9eb5;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.color-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.color-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.color-btn:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px currentColor;
+}
+
+.color-btn[data-color="#7aa2f7"] { background: #7aa2f7; }
+.color-btn[data-color="#bb9af7"] { background: #bb9af7; }
+.color-btn[data-color="#f28b82"] { background: #f28b82; }
+.color-btn[data-color="#98c379"] { background: #98c379; }
+.color-btn[data-color="transparent"] { 
+    background: #1a2938;
+    border: 2px dashed #5f748d;
+    position: relative;
+}
+
+.color-btn[data-color="transparent"]::after {
+    content: '↺';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #8f9eb5;
+    font-size: 16px;
+}
+
+.color-btn.active {
+    border-color: #ffffff;
+    transform: scale(1.2);
+}
+
+.date-hint {
+    font-size: 11px;
+    color: #5f748d;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    font-style: italic;
+}
+
+/* Правая колонка */
+.right-block {
+    background: #28374c;
+}
+
+/* ===== ВИДЖЕТ КАЛЬКУЛЯТОРА ===== */
+.calculator-widget {
+    background: #1e2c3c;
+    border-radius: 24px;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+    border: 1px solid #3a5068;
+    margin-bottom: 20px;
+}
+
+.calculator-header {
+    margin-bottom: 16px;
+    border-bottom: 1px solid #3a5068;
+    padding-bottom: 10px;
+}
+
+.calculator-title {
+    font-size: 28px;
+    font-weight: 400;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.calculator-display {
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 16px;
+    padding: 15px;
+    margin-bottom: 20px;
+    min-height: 100px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.calc-expression {
+    text-align: left;
+    font-size: 16px;
+    color: #8f9eb5;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    word-wrap: break-word;
+    min-height: 20px;
+    opacity: 0.8;
+}
+
+.calc-result {
+    text-align: right;
+    font-size: 36px;
+    color: #a9bad4;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    word-wrap: break-word;
+    font-weight: 400;
+}
+
+.calculator-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.calc-btn {
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 12px;
+    padding: 14px 0;
+    font-size: 22px;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calc-btn:hover {
+    background: #2a3f54;
+    border-color: var(--accent-color);
+    transform: scale(1.02);
+}
+
+.calc-btn.function {
+    background: #1f3142;
+    color: #d4bfff;
+    font-size: 16px;
+    padding: 4px 0;
+}
+
+.calc-btn.function:hover {
+    background: #2a4055;
+    color: #ffffff;
+}
+
+.calc-btn.operator {
+    background: #2a3f54;
+    color: #d4bfff;
+    font-size: 24px;
+}
+
+.calc-btn.operator:hover {
+    background: #3a5068;
+    color: #ffffff;
+}
+
+.calc-btn.equals {
+    background: var(--accent-color);
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.calc-btn.equals:hover {
+    background: #5f8ad4;
+}
+
+.calc-btn.clear {
+    background: #3a2e3a;
+    color: #f28b82;
+    font-size: 20px;
+    grid-column: span 1;
+}
+
+.calc-btn.clear:hover {
+    background: #4a3a4a;
+    color: #ff9999;
+}
+
+.calc-btn[data-value="exp"],
+.calc-btn[data-value="pow"] {
+    font-size: 14px;
+}
+
+.calc-btn[data-value="sqrt"],
+.calc-btn[data-value="square"],
+.calc-btn[data-value="cube"] {
+    font-size: 18px;
+}
+
+.calc-btn[data-value="pi"] {
+    font-size: 18px;
+}
+
+.calc-btn[data-value="←"] {
+    font-size: 18px;
+    background: #2a3f54;
+}
+
+.calc-btn[data-value="←"]:hover {
+    background: #3a5068;
+}
+
+.calc-btn[data-value="0"],
+.calc-btn[data-value="1"],
+.calc-btn[data-value="2"],
+.calc-btn[data-value="3"],
+.calc-btn[data-value="4"],
+.calc-btn[data-value="5"],
+.calc-btn[data-value="6"],
+.calc-btn[data-value="7"],
+.calc-btn[data-value="8"],
+.calc-btn[data-value="9"] {
+    font-size: 22px;
+}
+
+.calc-btn[data-value="("],
+.calc-btn[data-value=")"] {
+    background: #1f3142;
+    color: #d4bfff;
+}
+
+/* ===== ВИДЖЕТ КОНВЕРТЕРА ===== */
+.converter-widget {
+    background: #1e2c3c;
+    border-radius: 24px;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+    border: 1px solid #3a5068;
+    margin-bottom: 20px;
+}
+
+.converter-header {
+    margin-bottom: 16px;
+    border-bottom: 1px solid #3a5068;
+    padding-bottom: 10px;
+}
+
+.converter-title {
+    font-size: 28px;
+    font-weight: 400;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.converter-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.converter-tab {
+    flex: 1;
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 30px;
+    padding: 8px 0;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: #8f9eb5;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.converter-tab.active {
+    background: #2a3f54;
+    color: #ffffff;
+    border-color: var(--accent-color);
+}
+
+.converter-content {
+    display: none;
+}
+
+.converter-content.active {
+    display: block;
+}
+
+.converter-row {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    width: 100%;        /* на всю ширину родителя */
+    align-items: stretch; /* чтобы инпут и селект были одной высоты */
+}
+
+.converter-input {
+    flex: 1;
+    min-width: 0;       /* ← важно: разрешает полю сжиматься меньше содержимого */
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 16px;
+    padding: 14px 16px;
+    color: #ffffff;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.converter-input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+.converter-input[readonly] {
+    background: #1f3142;
+    color: #d4bfff;
+    border-color: #3a5068;
+}
+
+.custom-select {
+    position: relative;
+    width: 80px;       /* фиксированная ширина */
+    min-width: 80px;   /* запрещаем сжиматься */
+    max-width: 80px;
+    flex-shrink: 0;     /* в flex-контейнере не сжимается */
+}
+
+.custom-select select {
+    width: 100%;
+    height: 100%;                 /* на всю высоту родителя */
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    border-radius: 16px;
+    padding: 10px;
+    color: #ffffff;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.custom-select select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-light);
+}
+
+.custom-select::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #8f9eb5;
+    pointer-events: none;
+    transition: all 0.2s;
+}
+
+.custom-select:hover::after {
+    border-top-color: var(--accent-color);
+}
+
+.converter-input::-webkit-outer-spin-button,
+.converter-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.converter-input[type=number] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.converter-equals {
+    text-align: center;
+    color: #5f748d;
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+.converter-note {
+    text-align: right;
+    color: #5f748d;
+    font-size: 11px;
+    margin-top: 10px;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ===== ПЕРЕТАСКИВАНИЕ ВИДЖЕТОВ ===== */
+.notes-widget[draggable="true"],
+.draw-widget[draggable="true"],
+.plans-widget[draggable="true"],
+.calendar-widget[draggable="true"],
+.tracker-widget[draggable="true"] {  /* Добавлено */
+    cursor: grab;
+    user-select: none;
+    -webkit-user-drag: element;
+}
+
+.notes-widget.dragging,
+.draw-widget.dragging,
+.plans-widget.dragging,
+.calendar-widget.dragging,
+.tracker-widget.dragging {  /* Добавлено */
+    opacity: 0.5;
+}
+
+.drag-indicator {
+    height: 4px;
+    background: var(--accent-color);
+    width: 100%;
+    margin: 10px 0;
+    box-shadow: 0 0 10px var(--accent-glow);
+    border-radius: 2px;
+}
+
+.center-block .block-content > * {
+    margin-bottom: 20px;
+}
+
+.center-block .block-content > *:last-child {
+    margin-bottom: 0;
+}
+
+.center-block {
+    overflow: auto;
+}
+
+.center-block .block-content {
+    overflow: visible;
+}
+
+.left-block, .right-block {
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== АДАПТИВНОСТЬ ===== */
+@media (max-width: 1000px) {
+    .header-info {
+        gap: 16px;
+        padding: 6px 16px;
+    }
+    
+    .time {
+        font-size: 22px;
+    }
+    
+    .date {
+        font-size: 12px;
+    }
+    
+    .timer-display {
+        font-size: 20px;
+    }
+}
+
+/* ===== УДАЛЕНИЕ (КОРЗИНА) ===== */
+.delete-widget-btn {
+    background: transparent;
+    border: none;
+    color: #5f748d;          /* обычный серый цвет */
+    font-size: 18px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s;
+    padding: 0;
+}
+
+/* При наведении и при активном состоянии (открыто модальное окно) */
+.delete-widget-btn:hover,
+.delete-widget-btn.delete-active {
+    background-color: #f28b82;  /* красный фон */
+    color: white;                /* белая иконка */
+}
+
+/* ===== МОДАЛЬНОЕ ОКНО ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background: #1e2c3c;
+    border: 1px solid #3a5068;
+    border-radius: 24px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+/* Текст в модальном окне */
+.modal-message {
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    font-size: 18px;
+    color: #e1e9ff;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+/* Контейнер для кнопок */
+.modal-buttons {
+    display: flex;
+    gap: 20px;               /* расстояние между кнопками */
+    justify-content: center;
+}
+
+/* Базовые стили кнопок */
+.modal-btn {
+    font-family: 'Arial Black', 'Helvetica Bold', sans-serif;
+    font-size: 16px;
+    background: #1a2938;
+    border: 1px solid #3a5068;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 100px;
+}
+
+.modal-btn:hover {
+    background: #2a3f54;
+    border-color: #7aa2f7;
+}
+
+/* Синяя кнопка (для "Ок" или "Да", если не нужна красная) */
+.modal-btn.primary {
+    background: var(--accent-color); 
+    border-color: var(--accent-color);
+}
+
+.modal-btn.primary:hover {
+    background: var(--accent-color); 
+}
+
+/* Красная кнопка (для "Да" при удалении) */
+.modal-btn.danger {
+    background: #f28b82;
+    border-color: #f28b82;
+    color: white;
+}
+
+.modal-btn.danger:hover {
+    background: #e06c5c;
+    border-color: #e06c5c;
+}
+
+/* Заглушка для телефонов */
+.mobile-warning {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #0c121c;
+    color: white;
+    z-index: 9999999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.mobile-warning h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    color: #7aa2f7;
+    letter-spacing: 1px;
+}
+
+.mobile-warning p {
+    font-size: 16px;
+    color: #8f9eb5;
+    line-height: 1.6;
+}
+
+/* ===== АДАПТИВНОСТЬ ДЛЯ БОЛЬШИХ ЭКРАНОВ ===== */
+
+/* 1600px — начинаем плавно уменьшать */
+@media (max-width: 1600px) {
+    .header-content {
+        padding: 18px 30px;
+    }
+    
+    .header-info {
+        gap: 50px;
+    }
+    
+    .logo h1 {
+        font-size: 56px;
+    }
+    
+    .time, .date, .timer-display {
+        font-size: 38px;
+    }
+    
+    .weather-temp {
+        font-size: 34px;
+    }
+    
+    .weather-city {
+        font-size: 24px;
+    }
+}
+
+/* 1400px — уменьшаем еще */
+@media (max-width: 1400px) {
+    .header-content {
+        padding: 16px 24px;
+    }
+    
+    .header-info {
+        gap: 40px;
+    }
+    
+    .logo h1 {
+        font-size: 48px;
+    }
+    
+    .time, .date, .timer-display {
+        font-size: 34px;
+    }
+    
+    .time-row {
+        width: 160px;
+    }
+    
+    .weather-temp {
+        font-size: 30px;
+        width: 70px;
+        min-width: 70px;
+        max-width: 70px;
+    }
+    
+    .weather-city {
+        font-size: 20px;
+        width: 110px;
+        min-width: 110px;
+        max-width: 110px;
+    }
+    
+    .time-label, .timer-label, .date-label, .weather-label {
+        font-size: 9px;
+        letter-spacing: 1.5px;
+    }
+    
+    .theme-btn {
+        width: 26px;
+        height: 26px;
+    }
+    
+    .settings-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 22px;
+    }
+    
+    .settings-text {
+        font-size: 18px;
+    }
+}
+
+/* 1200px — колонки становятся теснее */
+@media (max-width: 1200px) {
+    .header-info {
+        gap: 30px;
+    }
+    
+    .logo h1 {
+        font-size: 42px;
+    }
+    
+    .time, .date, .timer-display {
+        font-size: 30px;
+    }
+    
+    .timer-row {
+        gap: 15px;
+    }
+    
+    .time-row {
+        width: 140px;
+    }
+    
+    .weather-temp {
+        font-size: 26px;
+        width: 60px;
+        min-width: 60px;
+        max-width: 60px;
+    }
+    
+    .weather-city {
+        font-size: 18px;
+        width: 100px;
+        min-width: 100px;
+        max-width: 100px;
+    }
+    
+    .columns {
+        grid-template-columns: 1fr 2fr 1fr;
+    }
+    
+    .block {
+        padding: 20px;
+    }
+    
+    .apps-widget {
+        padding: 16px;
+    }
+    
+    .apps-title, .plans-title, .calendar-title, .calculator-title, .converter-title {
+        font-size: 24px;
+    }
+    
+    .calculator-buttons {
+        gap: 6px;
+    }
+    
+    .calc-btn {
+        padding: 12px 0;
+        font-size: 20px;
+    }
+    
+    .calc-btn.function {
+        font-size: 14px;
+    }
+    
+    .converter-row {
+        gap: 8px;
+    }
+    
+    .converter-input {
+        padding: 12px 14px;
+        font-size: 15px;
+    }
+    
+    .custom-select select {
+        padding: 12px 26px 12px 14px;
+        font-size: 13px;
+    }
+    
+    .calendar-cell {
+        padding: 6px;
+    }
+    
+    .cell-date {
+        font-size: 13px;
+    }
+    
+    .habit-name span {
+        font-size: 14px;
+    }
+    
+    .habit-cell {
+        width: 34px;
+        height: 34px;
+    }
+    
+    .timer-btn {
+        font-size: 12px;
+    }
+    
+    .timer-buttons {
+        gap: 4px;
+        min-width: 50px;
+    }
+    
+    .time-block::after,
+    .timer-block::after {
+        font-size: 30px;
+        right: -20px;
+    }
+}
+
+/* ===== АДАПТИВНОСТЬ ВИДЖЕТОВ ===== */
+
+/* ---- 1. Планы ---- */
+@media (max-width: 1400px) {
+    .plans-widget { padding: 16px; }
+    .plans-title { font-size: 24px; }
+    .plans-tabs { gap: 6px; margin-bottom: 15px; }
+    .plans-tab { font-size: 11px; padding: 6px 0; }
+    .plan-item { padding: 8px 0; }
+    .plan-text { font-size: 14px; }
+    .plan-input { padding: 10px 14px; font-size: 14px; }
+    .add-plan-btn { width: 40px; height: 40px; font-size: 20px; }
+    .plan-list { max-height: 120px; }
+}
+
+@media (max-width: 1200px) {
+    .plans-widget { padding: 12px; }
+    .plans-title { font-size: 20px; }
+    .plans-tab { font-size: 11px; padding: 5px 0; }
+    .plan-text { font-size: 13px; }
+    .plan-input { padding: 8px 12px; font-size: 13px; }
+    .add-plan-btn { width: 34px; height: 34px; font-size: 18px; }
+    .progress-text { font-size: 10px; }
+    .plan-list { max-height: 100px; }
+}
+
+/* ---- 2. Трекер привычек ---- */
+@media (max-width: 1400px) {
+    .tracker-widget { padding: 16px; }
+    .tracker-title-input { font-size: 24px; }
+    .tracker-table th { font-size: 13px; height: 48px; }
+    .tracker-table td { height: 48px; }
+    .habit-name { height: 48px; padding: 4px 0; }
+    .habit-name span { max-height: 48px; font-size: 14px; }
+    .habit-cell { width: 34px; height: 34px; }
+    .tracker-input { padding: 10px 14px; font-size: 14px; }
+    .add-tracker-btn { width: 40px; height: 40px; font-size: 20px; }
+    .tracker-table th:first-child, 
+    .tracker-table td:first-child { width: 220px; min-width: 220px; max-width: 220px; }
+}
+
+@media (max-width: 1200px) {
+    .tracker-widget { padding: 12px; }
+    .tracker-title-input { font-size: 20px; }
+    .tracker-table th { font-size: 11px; height: 40px; }
+    .tracker-table td { height: 40px; }
+    .habit-name { height: 40px; padding: 2px 0; }
+    .habit-name span { max-height: 40px; font-size: 12px; }
+    .habit-cell { width: 28px; height: 28px; }
+    .tracker-input { padding: 8px 12px; font-size: 13px; }
+    .add-tracker-btn { width: 34px; height: 34px; font-size: 18px; }
+    .tracker-table th:first-child, 
+    .tracker-table td:first-child { width: 160px; min-width: 160px; max-width: 160px; }
+}
+
+/* ---- 3. Календарь (только шапка) ---- */
+@media (max-width: 1400px) {
+    .calendar-widget { padding: 16px; }
+    .calendar-title { font-size: 24px; }
+    .calendar-month { gap: 10px; padding: 4px 10px; }
+    .month-year { font-size: 14px; min-width: 100px; }
+    .month-prev, .month-next { font-size: 16px; padding: 4px 8px; }
+    .day-name { font-size: 12px; padding: 6px 0; }
+    .cell-date { font-size: 13px; }
+    .cell-note { font-size: 9px; }
+}
+
+@media (max-width: 1200px) {
+    .calendar-widget { padding: 12px; }
+    .calendar-title { font-size: 20px; }
+    .calendar-month { gap: 8px; padding: 3px 8px; }
+    .month-year { font-size: 12px; min-width: 85px; }
+    .month-prev, .month-next { font-size: 14px; padding: 2px 6px; }
+    .day-name { font-size: 10px; padding: 4px 0; }
+    .cell-date { font-size: 11px; }
+    .cell-note { font-size: 8px; }
+    .calendar-grid { gap: 3px; }
+    .calendar-cell { padding: 4px; }
+}
+
+/* ---- 4. Калькулятор (высота кнопок) ---- */
+@media (max-width: 1400px) {
+    .calculator-widget { padding: 16px; }
+    .calculator-title { font-size: 24px; }
+    .calculator-display { padding: 12px; min-height: 80px; margin-bottom: 15px; }
+    .calc-result { font-size: 30px; }
+    .calculator-buttons { gap: 6px; }
+    .calc-btn { padding: 10px 0; font-size: 18px; border-radius: 10px; }
+    .calc-btn.function { font-size: 13px; }
+    .calc-btn.operator { font-size: 20px; }
+    .calc-btn.equals { font-size: 22px; }
+    .calc-btn.clear { font-size: 18px; }
+}
+
+@media (max-width: 1200px) {
+    .calculator-widget { padding: 12px; }
+    .calculator-title { font-size: 20px; }
+    .calculator-display { padding: 10px; min-height: 60px; margin-bottom: 12px; }
+    .calc-result { font-size: 24px; }
+    .calc-expression { font-size: 13px; }
+    .calculator-buttons { gap: 4px; }
+    .calc-btn { padding: 8px 0; font-size: 16px; border-radius: 8px; }
+    .calc-btn.function { font-size: 11px; }
+    .calc-btn.operator { font-size: 18px; }
+    .calc-btn.equals { font-size: 20px; }
+    .calc-btn.clear { font-size: 16px; }
+}
+
+/* ---- 5. Конвертер ---- */
+@media (max-width: 1400px) {
+    .converter-widget { padding: 16px; }
+    .converter-title { font-size: 24px; }
+    .converter-tabs { gap: 6px; margin-bottom: 15px; }
+    .converter-tab { font-size: 13px; padding: 6px 0; }
+    .converter-row { gap: 8px; margin: 8px 0; }
+    .converter-input { padding: 10px 14px; font-size: 14px; }
+    .custom-select { width: 80px; }
+    .custom-select select { padding: 10px 24px 10px 12px; font-size: 12px; }
+    .converter-equals { font-size: 18px; margin: 3px 0; }
+    .converter-note { font-size: 10px; }
+}
+
+@media (max-width: 1200px) {
+    .converter-widget { padding: 12px; }
+    .converter-title { font-size: 20px; }
+    .converter-tab { font-size: 12px; padding: 5px 0; }
+    .converter-row { gap: 6px; margin: 6px 0; }
+    .converter-input { padding: 8px 12px; font-size: 13px; }
+    .custom-select { width: 65px; }
+    .custom-select select { padding: 8px 20px 8px 10px; font-size: 11px; }
+    .converter-equals { font-size: 16px; margin: 2px 0; }
+    .converter-note { font-size: 9px; }
+}
+
+
+@media (max-width: 1024px) {
+    .mobile-warning {
+        display: flex;
+    }
+    
+    /* Скрываем всё остальное на телефоне */
+    body > *:not(.mobile-warning) {
+        display: none !important;
+    }
+    
+    /* Насильно делаем body видимым, если оно было прозрачным */
+    body {
+        opacity: 1 !important;
+        background: #0c121c !important;
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "coccoon workspace",
+  "short_name": "coccoon",
+  "description": "Рабочее пространство coccoon",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0c121c",
+  "theme_color": "#0c121c",
+  "lang": "ru",
+  "dir": "ltr"
+}

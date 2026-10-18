@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>coccoon · пространство</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="mobile-warning">
+    <h2>Откройте на компьютере</h2>
+    <p>Это рабочее пространство создано для больших экранов.<br>Пожалуйста, зайдите с ПК или ноутбука.</p>
+</div>
+
+<style>
+    body {
+        opacity: 0;
+        transition: opacity 1s ease;
+    }
+    body.loaded {
+        opacity: 1;
+    }
+</style>
+
+<script>
+    // Проверяем что мы на coccoon.html и был переход с затемнением
+    if (document.referrer.includes('index.html')) {
+        // Затемнено при загрузке
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 1s ease';
+        
+        // Плавно появляемся и добавляем класс loaded
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+            document.body.classList.add('loaded'); // Этого не хватало
+        }, 100);
+    } else {
+        // Если зашли напрямую - показываем сразу и добавляем класс
+        document.body.style.opacity = '1';
+        document.body.classList.add('loaded'); // И здесь тоже
+    }
+</script>
+
+<!-- Добавь сразу после <body> -->
+<div class="instruction-overlay" id="instructionOverlay">
+    <!-- Модальное окно -->
+    <div class="instruction-modal" id="instructionModal">
+        <button class="close-btn" id="closeInstruction">✕</button>
+        <h1 id="instructionTitle">Верхняя панель</h1>
+        <div class="instruction-content" id="instructionContent">
+            <p>В верхней панели находятся часы с секундами...</p>
+        </div>
+        <div class="instruction-footer">
+            <button class="skip-btn" id="skipBtn">Пропустить</button>
+            <button class="next-btn" id="nextBtn">Далее</button>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Остальные стили модального окна без изменений */
+.instruction-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.instruction-modal {
+    background: #1e2c3c;
+    border: 1px solid #3a5068;
+    border-radius: 24px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    animation: fadeIn 0.3s ease;
+    z-index: 9999;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: #8f9eb5;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 10;
+}
+
+.close-btn:hover {
+    color: #ffffff;
+}
+
+.instruction-modal h1 {
+    font-size: 30px;
+    color: #e1e9ff;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #3a5068;
+    padding-bottom: 10px;
+    font-family: 'Impact', 'Arial Narrow', sans-serif;
+    font-weight: normal;
+    padding-right: 30px;
+}
+
+.instruction-content p {
+    color: #e1e9ff;
+    margin: 15px 0;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+.instruction-footer {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    justify-content: flex-end;
+}
+
+.skip-btn {
+    background: transparent;
+    color: #8f9eb5;
+    border: 1px solid #3a5068;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Arial Black', 'Helvetica Bold', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.skip-btn:hover {
+    background: #2a3f54;
+    color: #ffffff;
+    border-color: #5f748d;
+}
+
+.next-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Arial Black', 'Helvetica Bold', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.next-btn:hover {
+    background: var(--accent-color);
+    transform: scale(1.02);
+}
+</style>
+
+<script>
+const instructions = [
+    {
+        title: 'Верхняя панель',
+        text: 'В верхней панели находятся часы с секундами, секундомер с кнопками старта и сброса (рекомендуем запустить его для полного погружения), погода определяется автоматически по вашему местоположению, а цветными кнопками можно менять оформление страницы.'
+    },
+    {
+        title: 'Левая колонка',
+        text: 'В левой колонке живут приложения — уже есть Яндекс Музыка, ChatGPT и Telegram, а через кнопку с плюсиком можно добавить любые другие, указав название и ссылку. Ненужные приложения удаляются крестиком. Также в левой колонке находится План — можно ставить задачи на день, неделю, месяц и год, отмечать выполненные и следить за прогрессом. Отдельная кнопка добавления виджетов позволяет расширять пространство новыми заметками и рисунками.'
+    },
+    {
+        title: 'Центральная колонка',
+        text: 'Центральная колонка — самое сердце рабочего пространства. Здесь вы найдете заметки с чекбоксами, где можно записывать важное и отмечать выполненное, а также рисовалку с тетрадной клеткой и набором цветов — удобно для быстрых набросков или записей от руки. Трекер привычек помогает следить за регулярностью дел: просто нажимайте на ячейки с пн по вс, чтобы отметить выполнение, а прогресс-бар покажет общий результат за неделю. Календарь позволяет оставлять заметки на любой день и выделять даты цветом — дважды кликните по числу, чтобы добавить напоминание или событие.'
+    },
+    {
+        title: 'Правая колонка',
+        text: 'В правой колонке расположились калькулятор с кучей научных функций и конвертер величин, который поможет перевести длину, валюту или вес, курс валют примерный!'
+    }
+];
+
+let currentStep = 0;
+
+function updateInstruction() {
+    document.getElementById('instructionTitle').textContent = instructions[currentStep].title;
+    document.getElementById('instructionContent').innerHTML = `<p>${instructions[currentStep].text}</p>`;
+    
+    if (currentStep === instructions.length - 1) {
+        document.getElementById('nextBtn').textContent = 'Готово';
+    } else {
+        document.getElementById('nextBtn').textContent = 'Далее';
+    }
+}
+
+document.getElementById('closeInstruction').onclick = function() {
+    document.getElementById('instructionOverlay').style.display = 'none';
+};
+
+document.getElementById('skipBtn').onclick = function() {
+    document.getElementById('instructionOverlay').style.display = 'none';
+};
+
+document.getElementById('nextBtn').onclick = function() {
+    if (currentStep < instructions.length - 1) {
+        currentStep++;
+        updateInstruction();
+    } else {
+        document.getElementById('instructionOverlay').style.display = 'none';
+    }
+};
+
+updateInstruction();
+</script>
+
+<!-- ШАПКА (липкая) -->
+<header class="header">
+    <div class="header-content">
+        <div class="logo">
+            <h1>coccoon</h1>
+        </div>
+        
+        <div class="header-info">
+            <!-- Время -->
+            <div class="time-block">
+                <div class="time-row">
+                    <div class="time" id="currentTime">--:--:--</div>
+                </div>
+                <div class="time-label">время</div>
+            </div>
+            
+            <!-- Секундомер -->
+            <div class="timer-block">
+                <div class="timer-row">
+                    <div class="timer-display" id="stopwatch">00:00:00</div>
+                    <div class="timer-buttons">
+                        <button class="timer-btn" id="resetStopwatch">сброс</button>
+                        <button class="timer-btn" id="startStopwatch">старт</button>
+                    </div>
+                </div>
+                <div class="timer-label">секундомер</div>
+            </div>
+            
+            <!-- Дата -->
+            <div class="date-block">
+                <div class="date-row">
+                    <div class="date" id="currentDate">---</div>
+                </div>
+                <div class="date-label">дата</div>
+            </div>
+        </div>
+        
+            <!-- Кнопки смены темы (куда хочешь, например в правую колонку) -->
+<div class="theme-switcher">
+    <button class="theme-btn" data-theme="blue" style="background: #7aa2f7"></button>
+    <button class="theme-btn" data-theme="red" style="background: #f28b82"></button>
+    <button class="theme-btn" data-theme="green" style="background: #98c379"></button>
+    <button class="theme-btn" data-theme="purple" style="background: #bb9af7"></button>
+    <button class="theme-btn" data-theme="orange" style="background: #ffb347"></button>
+</div>
+
+
+
+
+    </div>
+</header>
+
+    <!-- ТРИ КОЛОНКИ -->
+    <div class="columns">
+<!-- Левая колонка -->
+<div class="block left-block">
+    <div class="block-content">
+
+<!-- Добавь в правую часть шапки, рядом с цветами -->
+<div style="display: flex; align-items: center; gap: 8px;">
+    <div class="settings-btn" id="settingsBtn">
+        <i class="fas fa-sliders-h"></i>
+    </div>
+    <span class="settings-text">добавить виджет</span>
+</div>
+<!-- Модальное окно добавления виджета -->
+<div class="widget-modal" id="widgetModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Добавить виджет</h3>
+            <button class="modal-close" id="closeModal">✕</button>
+        </div>
+        <div class="modal-list">
+            <div class="modal-item" data-widget="notes">
+                <span class="item-name">Заметка</span>
+            </div>
+            <div class="modal-item" data-widget="draw">
+                <span class="item-name">Рисунок</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Виджет приложений -->
+<div class="apps-widget">
+    <!-- Шапка -->
+    <div class="apps-header">
+        <h2 class="apps-title">Приложения</h2>
+    </div>
+    
+    <!-- Контейнер с приложениями (скроллится) -->
+    <div class="apps-categories" id="appsCategories">
+        <!-- Приложения будут загружаться через JS -->
+    </div>
+</div>
+
+<!-- Модальное окно для добавления приложения -->
+<div class="app-modal" id="appModal" style="display: none;">
+    <div class="app-modal-content">
+        <div class="app-modal-header">
+            <h3>Добавить приложение</h3>
+            <button class="app-modal-close" onclick="closeAppModal()">✕</button>
+        </div>
+        <div class="app-modal-body">
+            <input type="text" class="app-modal-input" id="appNameInput" placeholder="название" style="font-style: italic;">
+            <input type="text" class="app-modal-input" id="appUrlInput" placeholder="ссылка" style="font-style: italic;">
+            
+<!-- Раздел смайликов -->
+<div class="emoji-section">
+    <div class="emoji-label">выберите смайлик</div>
+    <div class="emoji-grid" id="emojiGrid">
+        <button class="emoji-btn" data-emoji="🎧">🎧</button>
+        <button class="emoji-btn" data-emoji="🤖">🤖</button>
+        <button class="emoji-btn" data-emoji="✈️">✈️</button>
+        <button class="emoji-btn" data-emoji="📺">📺</button>
+        <button class="emoji-btn" data-emoji="🎮">🎮</button>
+        <button class="emoji-btn" data-emoji="📌">📌</button>
+        <button class="emoji-btn" data-emoji="🎨">🎨</button>
+        <button class="emoji-btn" data-emoji="🔍">🔍</button>
+        <button class="emoji-btn" data-emoji="💬">💬</button>
+        <button class="emoji-btn" data-emoji="📝">📝</button>
+        <button class="emoji-btn" data-emoji="🎵">🎵</button>
+        <button class="emoji-btn" data-emoji="🌊">🌊</button>
+        <button class="emoji-btn" data-emoji="⚡">⚡</button>
+        <button class="emoji-btn" data-emoji="✨">✨</button>
+        <button class="emoji-btn" data-emoji="🪁">🪁</button>
+        <button class="emoji-btn" data-emoji="🎥">🎥</button>
+        <button class="emoji-btn" data-emoji="🔄">🔄</button>
+        <button class="emoji-btn" data-emoji="👽">👽</button>
+        <button class="emoji-btn" data-emoji="📱">📱</button>
+        <button class="emoji-btn" data-emoji="💻">💻</button>
+        <button class="emoji-btn" data-emoji="🖥️">🖥️</button>
+        <button class="emoji-btn" data-emoji="📷">📷</button>
+        <button class="emoji-btn" data-emoji="🎙️">🎙️</button>
+        <button class="emoji-btn" data-emoji="🎚️">🎚️</button>
+        <button class="emoji-btn" data-emoji="🎛️">🎛️</button>
+        <button class="emoji-btn" data-emoji="🎸">🎸</button>
+        <button class="emoji-btn" data-emoji="🥁">🥁</button>
+        <button class="emoji-btn" data-emoji="🎹">🎹</button>
+        <button class="emoji-btn" data-emoji="🎷">🎷</button>
+        <button class="emoji-btn" data-emoji="🎺">🎺</button>
+        <button class="emoji-btn" data-emoji="🎻">🎻</button>
+        <button class="emoji-btn" data-emoji="🎬">🎬</button>
+        <button class="emoji-btn" data-emoji="🎭">🎭</button>
+        <button class="emoji-btn" data-emoji="🎨">🎨</button>
+        <button class="emoji-btn" data-emoji="🎪">🎪</button>
+        <button class="emoji-btn" data-emoji="🎟️">🎟️</button>
+    </div>
+</div>
+        </div>
+        <div class="app-modal-footer">
+            <button class="app-modal-btn cancel" onclick="closeAppModal()">Отменить</button>
+            <button class="app-modal-btn add" onclick="addNewApp()">Добавить</button>
+        </div>
+    </div>
+</div>
+                                <!-- Новый виджет: Планы -->
+        <div class="plans-widget">
+            <div class="plans-header">
+                <h2 class="plans-title">Планы</h2>
+            </div>
+            
+            <div class="plans-tabs">
+                <button class="plans-tab active" data-plan="day">день</button>
+                <button class="plans-tab" data-plan="week">неделя</button>
+                <button class="plans-tab" data-plan="month">месяц</button>
+                <button class="plans-tab" data-plan="year">год</button>
+            </div>
+            
+            <!-- День -->
+            <div class="plan-content active" id="day-plan">
+                <div class="plan-progress">
+                    <div class="progress-text">прогресс дня</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="dayProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="plan-list" id="day-tasks">
+                    <!-- задачи будут добавляться -->
+                </div>
+                <div class="add-plan">
+                    <input type="text" class="plan-input" id="day-input" placeholder="Задача на день">
+                    <button class="add-plan-btn" onclick="addTask('day')">✓</button>
+                </div>
+            </div>
+            
+            <!-- Неделя -->
+            <div class="plan-content" id="week-plan">
+                <div class="plan-progress">
+                    <div class="progress-text">прогресс недели</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="weekProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="plan-list" id="week-tasks">
+                    <!-- задачи будут добавляться -->
+                </div>
+                <div class="add-plan">
+                    <input type="text" class="plan-input" id="week-input" placeholder="Задача на неделю">
+                    <button class="add-plan-btn" onclick="addTask('week')">✓</button>
+                </div>
+            </div>
+            
+            <!-- Месяц -->
+            <div class="plan-content" id="month-plan">
+                <div class="plan-progress">
+                    <div class="progress-text">прогресс месяца</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="monthProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="plan-list" id="month-tasks">
+                    <!-- задачи будут добавляться -->
+                </div>
+                <div class="add-plan">
+                    <input type="text" class="plan-input" id="month-input" placeholder="Задача на месяц">
+                    <button class="add-plan-btn" onclick="addTask('month')">✓</button>
+                </div>
+            </div>
+            
+            <!-- Год -->
+            <div class="plan-content" id="year-plan">
+                <div class="plan-progress">
+                    <div class="progress-text">прогресс года</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="yearProgress" style="width: 0%;"></div>
+                    </div>
+                </div>
+                <div class="plan-list" id="year-tasks">
+                    <!-- задачи будут добавляться -->
+                </div>
+                <div class="add-plan">
+                    <input type="text" class="plan-input" id="year-input" placeholder="Задача на год">
+                    <button class="add-plan-btn" onclick="addTask('year')">✓</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+        <!-- Центральная колонка -->
+        <div class="block center-block">
+            <div class="block-content">
+                <!-- Виджет заметок -->
+                <div class="notes-widget" data-widget-id="notes-1">
+                    <div class="notes-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <input type="text" class="notes-title-input" value="Заметка №1" id="notesTitle">
+                            <button class="delete-widget-btn" onclick="showDeleteConfirm(this)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="notes-list" id="notesList"></div>
+                    
+                    <div class="notes-footer">
+                        <input type="text" class="note-input" id="noteInput" placeholder="Добавить заметку">
+                        <button class="add-note-btn" id="addNoteBtn">✓</button>
+                    </div>
+                </div>
+
+                <!-- Виджет рисования (тетрадный лист) -->
+                <div class="draw-widget" data-widget-id="draw-1">
+                    <div class="draw-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <input type="text" class="draw-title-input" value="Рисунок №1" id="drawTitle">
+                            <button class="delete-widget-btn" onclick="showDeleteConfirm(this)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="draw-canvas-container">
+                        <canvas id="drawCanvas" width="500" height="300"></canvas>
+                        <div class="grid-overlay"></div>
+                    </div>
+                    
+                    <div class="draw-footer">
+                        <button class="draw-btn" id="clearCanvas">очистить</button>
+                        <div class="undo-redo">
+                            <button class="draw-btn" id="undoBtn">←</button>
+                            <button class="draw-btn" id="redoBtn">→</button>
+                        </div>
+                        <div class="draw-tools">
+                            <button class="tool-btn active" data-color="#000000">●</button>
+                            <button class="tool-btn" data-color="#7aa2f7">●</button>
+                            <button class="tool-btn" data-color="#bb9af7">●</button>
+                            <button class="tool-btn" data-color="#f28b82">●</button>
+                            <button class="tool-btn" data-color="#98c379">●</button>
+                        </div>
+                    </div>
+                </div>
+
+
+        <!-- Виджет-трекер привычек -->
+        <div class="tracker-widget" data-widget-id="tracker-1">
+            <div class="tracker-header">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <input type="text" class="tracker-title-input" value="Трекер привычек">
+                </div>
+            </div>
+            
+            <!-- Прогресс бар -->
+            <div class="tracker-progress">
+                <div class="progress-text">прогресс недели</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="trackerProgress" style="width: 0%;"></div>
+                </div>
+            </div>
+            
+            <!-- Таблица трекера -->
+            <div class="tracker-table-container">
+                <table class="tracker-table">
+                    <thead>
+                        <tr>
+                            <th class="tracker-corner"></th>
+                            <th>пн</th>
+                            <th>вт</th>
+                            <th>ср</th>
+                            <th>чт</th>
+                            <th>пт</th>
+                            <th>сб</th>
+                            <th>вс</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trackerBody">
+                        <!-- Строки будут добавляться через JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Кнопка добавления новой привычки -->
+            <div class="add-tracker-row">
+                <input type="text" class="tracker-input" id="newTrackerInput" placeholder="Добавить привычку">
+                <button class="add-tracker-btn" id="addTrackerBtn">✓</button>
+            </div>
+        </div>
+        <!-- ===== КОНЕЦ ВСТАВКИ ===== -->
+        
+
+
+
+                <!-- Новый виджет: Календарь -->
+        <div class="calendar-widget">
+            <div class="calendar-header">
+                <h2 class="calendar-title">Календарь</h2>
+                <div class="calendar-month">
+                    <button class="month-prev">←</button>
+                    <span class="month-year" id="currentMonthYear">Март 2026</span>
+                    <button class="month-next">→</button>
+                </div>
+            </div>
+            
+            <div class="calendar-days">
+                <div class="day-name">пн</div>
+                <div class="day-name">вт</div>
+                <div class="day-name">ср</div>
+                <div class="day-name">чт</div>
+                <div class="day-name">пт</div>
+                <div class="day-name">сб</div>
+                <div class="day-name">вс</div>
+            </div>
+            
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Ячейки календаря будут генерироваться -->
+            </div>
+            
+            <div class="calendar-colors">
+                <div class="color-hint">выберите цвет и нажмите на дату</div>
+                <div class="color-buttons">
+                    <button class="color-btn" data-color="#7aa2f7" title="синий"></button>
+                    <button class="color-btn" data-color="#bb9af7" title="фиолетовый"></button>
+                    <button class="color-btn" data-color="#f28b82" title="красный"></button>
+                    <button class="color-btn" data-color="#98c379" title="зеленый"></button>
+                    <button class="color-btn" data-color="transparent" title="сбросить цвет"></button>
+                </div>
+                <div class="date-hint">щелкните 2 раза по дате чтобы написать</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+                <!-- Правая колонка -->
+        <div class="block right-block">
+            <div class="block-content">
+                <!-- Виджет калькулятора -->
+                <div class="calculator-widget">
+                    <div class="calculator-header">
+                        <h2 class="calculator-title">Калькулятор</h2>
+                    </div>
+                    
+                    <div class="calculator-display" id="calcDisplay">
+                        <div class="calc-expression"></div>
+                        <div class="calc-result"></div>
+                    </div>
+                    
+                    <div class="calculator-buttons">
+                        <!-- Первый ряд - научные функции -->
+                        <button class="calc-btn function" data-value="sqrt">√</button>
+                        <button class="calc-btn function" data-value="square">x²</button>
+                        <button class="calc-btn function" data-value="cube">x³</button>
+                        <button class="calc-btn function" data-value="pow">x^y</button>
+                        
+                        <button class="calc-btn function" data-value="sin">sin</button>
+                        <button class="calc-btn function" data-value="cos">cos</button>
+                        <button class="calc-btn function" data-value="tan">tan</button>
+                        <button class="calc-btn function" data-value="log">log</button>
+                        
+                        <button class="calc-btn function" data-value="ln">ln</button>
+                        <button class="calc-btn function" data-value="exp">e^x</button>
+                        <button class="calc-btn function" data-value="percent">%</button>
+                        <button class="calc-btn function" data-value="pi">π</button>
+                        
+                        <!-- Второй ряд - скобки и управление -->
+                        <button class="calc-btn" data-value="(">(</button>
+                        <button class="calc-btn" data-value=")">)</button>
+                        <button class="calc-btn" data-value="←">←</button>
+                        <button class="calc-btn operator" data-value="/">÷</button>
+                        
+                        <!-- Цифры и операции -->
+                        <button class="calc-btn" data-value="7">7</button>
+                        <button class="calc-btn" data-value="8">8</button>
+                        <button class="calc-btn" data-value="9">9</button>
+                        <button class="calc-btn operator" data-value="*">×</button>
+                        
+                        <button class="calc-btn" data-value="4">4</button>
+                        <button class="calc-btn" data-value="5">5</button>
+                        <button class="calc-btn" data-value="6">6</button>
+                        <button class="calc-btn operator" data-value="-">−</button>
+                        
+                        <button class="calc-btn" data-value="1">1</button>
+                        <button class="calc-btn" data-value="2">2</button>
+                        <button class="calc-btn" data-value="3">3</button>
+                        <button class="calc-btn operator" data-value="+">+</button>
+                        
+                        <button class="calc-btn" data-value="0">0</button>
+                        <button class="calc-btn" data-value=".">.</button>
+                        <button class="calc-btn equals" data-value="=">=</button>
+                        <button class="calc-btn clear" data-value="C">C</button>
+                    </div>
+                </div>
+
+<!-- Виджет конвертера -->
+<div class="converter-widget">
+    <div class="converter-header">
+        <h2 class="converter-title">Конвертер</h2>
+    </div>
+    
+    <div class="converter-tabs">
+        <button class="converter-tab active" data-tab="length">длина</button>
+        <button class="converter-tab" data-tab="currency">валюта</button>
+        <button class="converter-tab" data-tab="weight">вес</button>
+    </div>
+    
+    <!-- Длина -->
+    <div class="converter-content active" id="length-converter">
+        <div class="converter-row">
+            <input type="number" class="converter-input" id="length-input" value="1" step="any">
+            <div class="custom-select">
+                <select id="length-from">
+                    <option value="1">м</option>
+                    <option value="100">см</option>
+                    <option value="1000">мм</option>
+                    <option value="0.001">км</option>
+                    <option value="3.28084">фут</option>
+                    <option value="39.3701">дюйм</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="converter-equals">=</div>
+        
+        <div class="converter-row">
+            <input type="number" class="converter-input" id="length-output" value="100" readonly>
+            <div class="custom-select">
+                <select id="length-to">
+                    <option value="1">м</option>
+                    <option value="100" selected>см</option>
+                    <option value="1000">мм</option>
+                    <option value="0.001">км</option>
+                    <option value="3.28084">фут</option>
+                    <option value="39.3701">дюйм</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Валюта -->
+    <div class="converter-content" id="currency-converter">
+        <div class="converter-row">
+            <input type="number" class="converter-input" id="currency-input" value="100" step="any">
+            <div class="custom-select">
+                <select id="currency-from">
+                    <option value="1">RUB</option>
+                    <option value="0.011">USD</option>
+                    <option value="0.010">EUR</option>
+                    <option value="0.079">CNY</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="converter-equals">=</div>
+        
+        <div class="converter-row">
+            <input type="number" class="converter-input" id="currency-output" value="1.1" readonly>
+            <div class="custom-select">
+                <select id="currency-to">
+                    <option value="1">RUB</option>
+                    <option value="0.011" selected>USD</option>
+                    <option value="0.010">EUR</option>
+                    <option value="0.079">CNY</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="converter-note">* курс примерный</div>
+    </div>
+    
+    <!-- Вес -->
+    <div class="converter-content" id="weight-converter">
+        <div class="converter-row">
+            <input type="number" class="converter-input" id="weight-input" value="1" step="any">
+            <div class="custom-select">
+                <select id="weight-from">
+                    <option value="1">кг</option>
+                    <option value="1000">г</option>
+                    <option value="2.20462">фунт</option>
+                    <option value="35.274">унц</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="converter-equals">=</div>
+        
+        <div class="converter-row">
+            <input type="number" class="converter-input" id="weight-output" value="1000" readonly>
+            <div class="custom-select">
+                <select id="weight-to">
+                    <option value="1">кг</option>
+                    <option value="1000" selected>г</option>
+                    <option value="2.20462">фунт</option>
+                    <option value="35.274">унц</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+
+<!-- Модальное окно подтверждения -->
+<div class="modal-overlay" id="deleteModal" style="display: none;">
+    <div class="modal-content">
+        <p class="modal-message" id="modalMessage"></p>
+        <div class="modal-buttons" id="modalButtons"></div>
+    </div>
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>coccoon</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0c121c;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .center-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 120px;
+            font-weight: 400;
+            font-family: 'Impact', 'Arial Narrow', sans-serif;
+            color: #405770;
+            letter-spacing: 4px;
+            line-height: 1;
+            margin-bottom: 120px; /* Расстояние до подзаголовка */
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #2e3d4f;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 250px; /* Расстояние до шаров */
+            transform: translateY(-100px);
+            font-family: 'Arial Black', 'Helvetica Bold', sans-serif;
+        }
+
+        .balls-container {
+            display: flex;
+            gap: 20px;
+            height: 60px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .ball {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transform-origin: bottom;
+            pointer-events: auto;
+        }
+
+        .ball:nth-child(1) { background: #7aa2f7; }
+        .ball:nth-child(2) { background: #f28b82; }
+        .ball:nth-child(3) { background: #98c379; }
+        .ball:nth-child(4) { background: #bb9af7; }
+        .ball:nth-child(5) { background: #ffb347; }
+
+        /* Кнопка в центре (невидимая сначала) */
+        .btn {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: transparent;
+            color: #cdd9ea;
+            font-size: 24px;
+            padding: 14px 90px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-family: 'Impact', 'Arial Narrow', sans-serif;
+            opacity: 0;
+            transition: opacity 1s ease;
+            z-index: 100;
+            pointer-events: auto;
+            white-space: nowrap;
+        }
+
+        .btn.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-warning">
+    <h2>Откройте на компьютере</h2>
+    <p>Это рабочее пространство создано для больших экранов.<br>Пожалуйста, зайдите с ПК или ноутбука.</p>
+</div>
+    <div class="center-wrapper">
+        <h1>coccoon</h1>
+        <p class="subtitle">рабочее пространство</p>
+        
+        <div class="balls-container">
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+            <div class="ball"></div>
+        </div>
+    </div>
+
+    <a href="coccoon.html" class="btn" id="enterBtn">начать работу</a>
+
+    <script>
+        const balls = document.querySelectorAll('.ball');
+        const btn = document.getElementById('enterBtn');
+
+        let completedBalls = 0;
+        const totalBalls = balls.length;
+
+        function jumpBall(ball, jumpCount, startDelay) {
+            setTimeout(() => {
+                let startTime = null;
+                const jumpHeight = 30;
+                const jumpDuration = 600;
+                
+                function animateJump(timestamp) {
+                    if (!startTime) startTime = timestamp;
+                    const progress = (timestamp - startTime) / jumpDuration;
+                    
+                    if (progress < 1) {
+                        const easeProgress = Math.sin(progress * Math.PI);
+                        const y = easeProgress * jumpHeight;
+                        ball.style.transform = `translateY(-${y}px)`;
+                    } else {
+                        ball.style.transform = 'translateY(0)';
+                        
+                        if (jumpCount < 2) {
+                            jumpBall(ball, jumpCount + 1, 0);
+                        } else {
+                            completedBalls++;
+                            if (completedBalls === totalBalls) {
+                                setTimeout(() => {
+                                    expandBlueBall();
+                                }, 100);
+                            }
+                        }
+                        return;
+                    }
+                    
+                    requestAnimationFrame(animateJump);
+                }
+                
+                requestAnimationFrame(animateJump);
+            }, startDelay);
+        }
+
+        function expandBlueBall() {
+            const blueBall = balls[0];
+            
+            balls.forEach(ball => {
+                ball.style.animation = 'none';
+                ball.style.transform = 'translateY(0)';
+            });
+            
+            let startTime = null;
+            const expandDuration = 2000;
+            
+            function animateExpand(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = Math.min((timestamp - startTime) / expandDuration, 1);
+                
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+                
+                const newWidth = 50 + (280 * easeProgress);
+                blueBall.style.width = `${newWidth}px`;
+                blueBall.style.borderRadius = '30px';
+                blueBall.style.zIndex = '10';
+                blueBall.style.marginRight = `-${280 * easeProgress}px`;
+                
+                for (let i = 1; i < balls.length; i++) {
+                    balls[i].style.opacity = 1 - easeProgress;
+                }
+                
+                if (progress >= 1) {
+                    btn.classList.add('visible');
+                }
+                
+                requestAnimationFrame(animateExpand);
+            }
+            
+            requestAnimationFrame(animateExpand);
+        }
+
+        balls.forEach((ball, index) => {
+            const delay = index * 200;
+            jumpBall(ball, 0, delay);
+        });
+    </script>
+
+<script>
+    document.getElementById('enterBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Создаем затемнение
+        const darken = document.createElement('div');
+        darken.style.position = 'fixed';
+        darken.style.top = '0';
+        darken.style.left = '0';
+        darken.style.width = '100%';
+        darken.style.height = '100%';
+        darken.style.backgroundColor = '#0c121c';
+        darken.style.opacity = '0';
+        darken.style.transition = 'opacity 1s ease';
+        darken.style.zIndex = '9999';
+        darken.style.pointerEvents = 'none';
+        
+        document.body.appendChild(darken);
+        
+        // Затемняем
+        setTimeout(() => {
+            darken.style.opacity = '1';
+        }, 50);
+        
+        // Переходим на следующую страницу
+        setTimeout(() => {
+            window.location.href = this.href;
+        }, 1050);
+    });
+</script>
+</body>
+</html>
